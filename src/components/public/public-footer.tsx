@@ -66,8 +66,8 @@ export function PublicFooter() {
 
   return (
     <footer className="mt-16 border-t-2 border-kawaii-sky/40 bg-card">
-      <div className="mx-auto grid max-w-7xl gap-10 px-6 py-12 md:grid-cols-[1.3fr_0.9fr_1.8fr]">
-        <div>
+      <div className="mx-auto grid max-w-7xl grid-cols-2 gap-x-6 gap-y-10 px-6 py-12 md:grid-cols-[1.3fr_0.9fr_1.8fr] md:gap-10">
+        <div className="col-span-2 md:col-span-1">
           <Link href="/" className="inline-flex items-center gap-3 text-xl font-black text-kawaii-mocha">
             <BrandLogo alt="" />
             Loichoi
@@ -76,7 +76,7 @@ export function PublicFooter() {
             {text.footer.description}
           </p>
         </div>
-        <div>
+        <div className="col-span-1">
           <h2 className="font-extrabold text-kawaii-mocha">{text.footer.discover}</h2>
           <nav className="mt-4 flex flex-col items-start gap-3 text-sm font-semibold text-kawaii-mocha/65">
             <Link className="hover:text-kawaii-warmbrown" href="/keyboards">{text.nav.explore}</Link>
@@ -84,9 +84,9 @@ export function PublicFooter() {
             <Link className="hover:text-kawaii-warmbrown" href="/guide">{text.nav.guide}</Link>
           </nav>
         </div>
-        <div>
+        <div className="col-span-1">
           <h2 className="font-extrabold text-kawaii-mocha">{text.footer.community}</h2>
-          <div className="mt-4 grid gap-2.5 sm:grid-cols-2">
+          <div className="mt-4 grid gap-2.5 sm:grid-cols-2 md:grid-cols-2">
             {socialLinks.map((social) => {
               const Icon = social.icon;
               return (
@@ -95,14 +95,14 @@ export function PublicFooter() {
                   href={social.href}
                   target="_blank"
                   rel="noreferrer"
-                  className="group flex items-center gap-3 rounded-2xl border border-kawaii-sky/50 bg-kawaii-cloud/40 px-3.5 py-2.5 transition-all duration-200 hover:border-kawaii-sky hover:bg-kawaii-babyblue/45 hover:shadow-cloud"
+                  className="group flex items-center gap-2 rounded-2xl border border-kawaii-sky/50 bg-kawaii-cloud/40 p-2 sm:gap-3 sm:px-3.5 sm:py-2.5 transition-all duration-200 hover:border-kawaii-sky hover:bg-kawaii-babyblue/45 hover:shadow-cloud"
                 >
                   <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-card shadow-xs transition-transform group-hover:scale-105">
                     <Icon className={`h-4 w-4 ${social.iconColor}`} />
                   </div>
                   <div className="min-w-0 flex-1">
                     <p className="text-xs font-bold text-kawaii-mocha group-hover:text-kawaii-warmbrown">{social.name}</p>
-                    <p className="truncate text-[11px] font-medium text-kawaii-mocha/55">{social.subtext}</p>
+                    <p className="truncate text-[10px] sm:text-[11px] font-medium text-kawaii-mocha/55">{social.subtext}</p>
                   </div>
                 </a>
               );

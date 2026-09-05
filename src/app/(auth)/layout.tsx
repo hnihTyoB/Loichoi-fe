@@ -25,7 +25,7 @@ export default function AuthLayout({
       <header className="relative z-10 flex h-20 items-center justify-between px-6 md:px-12">
         <Link href="/" className="group flex items-center gap-2.5 font-bold text-xl text-kawaii-mocha">
           <BrandLogo priority alt="" className="transition-transform duration-200 group-hover:scale-105" />
-          <span className="font-extrabold">Loichoi Kawaii</span>
+          <span className="hidden md:inline font-extrabold">Loichoi Kawaii</span>
         </Link>
         <div className="flex items-center gap-2">
           <LanguageToggle />

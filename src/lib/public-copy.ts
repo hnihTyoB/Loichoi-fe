@@ -109,7 +109,7 @@ const copy = {
     footer: {
       description: "Thư viện theme bàn phím điện thoại với nhiều ảnh xem trước và bộ file tải cho iOS, Android.",
       discover: "Khám phá",
-      community: "Cộng đồng & Mạng xã hội",
+      community: "Mạng xã hội",
       account: "Tài khoản",
       rights: "Loichoi. Nội dung được bảo lưu.",
     },
@@ -222,7 +222,7 @@ const copy = {
     footer: {
       description: "Mobile keyboard themes with rich previews and downloadable file packs for iOS and Android.",
       discover: "Discover",
-      community: "Community & Socials",
+      community: "Socials",
       account: "Account",
       rights: "Loichoi. All content reserved.",
     },

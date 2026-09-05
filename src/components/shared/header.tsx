@@ -65,7 +65,7 @@ export function Header() {
         )}
         <Link href="/" className="group flex items-center gap-2.5 font-bold text-xl tracking-tight text-kawaii-mocha">
           <BrandLogo priority alt="" className="transition-transform duration-200 group-hover:scale-105" />
-          <span className="font-extrabold bg-gradient-to-r from-kawaii-mocha to-kawaii-warmbrown bg-clip-text text-transparent">
+          <span className="hidden md:inline font-extrabold bg-gradient-to-r from-kawaii-mocha to-kawaii-warmbrown bg-clip-text text-transparent">
             Loichoi
           </span>
         </Link>
