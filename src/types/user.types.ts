@@ -27,3 +27,19 @@ export interface CreateUserPayload {
   password: string;
   roleId: string;
 }
+
+export interface UserDevice {
+  id: string;
+  deviceName: string;
+  ipAddress: string;
+  lastLoginAt: string;
+  createdAt: string;
+}
+
+export interface UserSession {
+  id: string;
+  deviceName: string;
+  ipAddress: string;
+  createdAt: string;
+  expiresAt: string;
+}

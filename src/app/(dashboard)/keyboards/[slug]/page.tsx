@@ -40,7 +40,7 @@ export default async function KeyboardDetailPage({
   if (keyboard === null) notFound();
 
   const rawDownloadState = Array.isArray(query.download) ? query.download[0] : query.download;
-  const allowedStates = new Set<DownloadState>(["login", "forbidden", "discord", "missing", "rate", "error"]);
+  const allowedStates = new Set<DownloadState>(["login", "forbidden", "discord", "quota", "missing", "rate", "error"]);
   const downloadState = rawDownloadState && allowedStates.has(rawDownloadState as DownloadState)
     ? rawDownloadState as DownloadState
     : undefined;

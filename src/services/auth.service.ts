@@ -1,7 +1,7 @@
 import { apiClient } from "@/lib/api-client";
 import { ApiResponse } from "@/types/api.types";
 import { LoginPayload, RegisterPayload } from "@/types/auth.types";
-import { User } from "@/types/user.types";
+import { User, UserDevice } from "@/types/user.types";
 
 export interface ActiveSession {
   id: string;
@@ -95,6 +95,15 @@ export const authService = {
 
   async revokeOtherSessions(): Promise<void> {
     await apiClient.delete("/auth/sessions");
+  },
+
+  async getDevices(): Promise<UserDevice[]> {
+    const res = await apiClient.get<ApiResponse<UserDevice[]>>("/auth/devices");
+    return res.data.data;
+  },
+
+  async deleteDevice(id: string): Promise<void> {
+    await apiClient.delete(`/auth/devices/${id}`);
   },
 
   getDiscordOAuthUrl(): string {

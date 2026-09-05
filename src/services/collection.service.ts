@@ -3,6 +3,18 @@ import type { ApiResponse } from "@/types/api.types";
 import type { AdminCollection, CollectionPayload, PageResult } from "@/types/admin.types";
 
 export const collectionService = {
+  async getManagementList(params: {
+    page?: number;
+    limit?: number;
+    search?: string;
+    isPublic?: boolean;
+    isFeatured?: boolean;
+    sortBy?: string;
+    sortOrder?: "asc" | "desc";
+  } = {}): Promise<PageResult<AdminCollection>> {
+    const response = await apiClient.get<PageResult<AdminCollection>>("/collections/manage", { params });
+    return response.data;
+  },
   async getList(params: { page?: number; limit?: number; search?: string; isFeatured?: boolean } = {}): Promise<PageResult<AdminCollection>> {
     const response = await apiClient.get<PageResult<AdminCollection>>("/collections", { params });
     return response.data;

@@ -11,9 +11,18 @@ import { getPublicCopy } from "@/lib/public-copy";
 import axios from "axios";
 import { keyboardService } from "@/services/keyboard.service";
 
-export type DownloadState = "login" | "forbidden" | "discord" | "missing" | "rate" | "error";
+export type DownloadState = "login" | "forbidden" | "discord" | "quota" | "missing" | "rate" | "error";
 
-const discordUrl = process.env.NEXT_PUBLIC_DISCORD_INVITE_URL || "https://discord.com";
+const defaultDiscordUrl = process.env.NEXT_PUBLIC_DISCORD_INVITE_URL || "https://discord.com";
+
+interface DownloadErrorData {
+  inviteUrl?: string;
+  tier?: string;
+  nextTier?: string;
+  currentDownloads?: number;
+  maxLimit?: number;
+  resetCycle?: string;
+}
 
 export function DownloadButton({ slug, errorState: initialErrorState }: { slug: string; errorState?: DownloadState }) {
   const { language } = useTranslation();
@@ -22,21 +31,27 @@ export function DownloadButton({ slug, errorState: initialErrorState }: { slug: 
   const text = getPublicCopy(language).download;
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [currentErrorState, setCurrentErrorState] = useState<DownloadState | undefined>(initialErrorState);
+  const [serverMessage, setServerMessage] = useState<string | null>(null);
+  const [activeDiscordUrl, setActiveDiscordUrl] = useState<string>(defaultDiscordUrl);
 
   const errorState = currentErrorState || initialErrorState;
 
-  const message =
+  const fallbackMessage =
     errorState === "login"
       ? text.login
       : errorState === "missing"
         ? text.missing
         : errorState === "rate"
           ? text.rate
-          : errorState === "discord" || errorState === "forbidden"
-            ? text.forbidden
-            : errorState === "error"
-              ? text.error
-              : undefined;
+          : errorState === "quota"
+            ? text.quota
+            : errorState === "discord" || errorState === "forbidden"
+              ? text.forbidden
+              : errorState === "error"
+                ? text.error
+                : undefined;
+
+  const displayMessage = serverMessage || fallbackMessage;
 
   const requiresLogin = !auth.isLoading && !auth.isAuthenticated;
 
@@ -68,6 +83,7 @@ export function DownloadButton({ slug, errorState: initialErrorState }: { slug: 
 
     setIsSubmitting(true);
     setCurrentErrorState(undefined);
+    setServerMessage(null);
 
     try {
       const data = await keyboardService.download(slug);
@@ -75,12 +91,24 @@ export function DownloadButton({ slug, errorState: initialErrorState }: { slug: 
         window.location.href = data.downloadUrl;
       }
     } catch (err: unknown) {
-      if (axios.isAxiosError<{ code?: string }>(err)) {
+      if (axios.isAxiosError<{ code?: string; message?: string; data?: DownloadErrorData }>(err)) {
         const status = err.response?.status;
         const code = err.response?.data?.code;
+        const respMessage = err.response?.data?.message;
+        const respData = err.response?.data?.data;
+
+        if (respMessage) {
+          setServerMessage(respMessage);
+        }
+
+        if (respData?.inviteUrl) {
+          setActiveDiscordUrl(respData.inviteUrl);
+        }
 
         if (status === 401) {
           setCurrentErrorState("login");
+        } else if (code === "DOWNLOAD_QUOTA_EXCEEDED") {
+          setCurrentErrorState("quota");
         } else if (status === 403 && code?.startsWith("DISCORD_")) {
           setCurrentErrorState("discord");
         } else if (status === 403) {
@@ -100,6 +128,9 @@ export function DownloadButton({ slug, errorState: initialErrorState }: { slug: 
     }
   };
 
+  const showDiscordButton =
+    errorState === "discord" || (errorState === "quota" && Boolean(activeDiscordUrl));
+
   return (
     <div className="w-full space-y-3">
       <form className="w-full" onSubmit={handleDownload}>
@@ -109,15 +140,15 @@ export function DownloadButton({ slug, errorState: initialErrorState }: { slug: 
         </Button>
       </form>
 
-      {message ? (
+      {displayMessage ? (
         <div
           className="w-full rounded-2xl border border-kawaii-blush bg-kawaii-blush/25 p-4 text-center text-sm font-semibold text-kawaii-mocha"
           role="alert"
         >
-          <p>{message}</p>
-          {errorState === "discord" ? (
+          <p>{displayMessage}</p>
+          {showDiscordButton ? (
             <Button asChild size="sm" variant="outline" className="mt-3 w-full bg-card">
-              <a href={discordUrl} target="_blank" rel="noreferrer">
+              <a href={activeDiscordUrl} target="_blank" rel="noreferrer">
                 <MessageCircle />
                 {text.discordAction}
               </a>

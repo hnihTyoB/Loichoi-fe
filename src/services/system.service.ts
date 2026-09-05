@@ -36,7 +36,17 @@ export const systemService = {
     const response = await apiClient.post<ApiResponse<MaintenanceConfig>>("/maintenance/disable");
     return response.data.data;
   },
-  async getAuditLogs(params: { actorId?: string; action?: string; targetType?: string; targetId?: string; page?: number; limit?: number } = {}): Promise<PageResult<AuditLog>> {
+  async getAuditLogs(params: {
+    actorId?: string;
+    action?: string;
+    targetType?: string;
+    targetId?: string;
+    startDate?: string;
+    endDate?: string;
+    search?: string;
+    page?: number;
+    limit?: number;
+  } = {}): Promise<PageResult<AuditLog>> {
     const response = await apiClient.get<PageResult<AuditLog>>("/rbac/audit-logs", { params });
     return response.data;
   },

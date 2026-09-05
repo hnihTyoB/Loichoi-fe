@@ -161,7 +161,11 @@ export function useResetImports() {
       toast.success(`${dict.resetSuccessPrefix} ${result.data.deletedCount} ${dict.resetSuccessSuffix}`);
     },
     onError: (err: unknown) => {
-      const message = (err as { response?: { data?: { message?: string } } })?.response?.data?.message ?? "Reset failed";
+      const status = (err as { response?: { status?: number } })?.response?.status;
+      const message =
+        status === 404 || status === 403
+          ? "Chức năng dọn sạch DB chỉ khả dụng trong môi trường phát triển (Development / Staging)."
+          : (err as { response?: { data?: { message?: string } } })?.response?.data?.message ?? "Reset failed";
       toast.error(message);
     },
   });

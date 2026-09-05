@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { ClipboardList, Eye, Search } from "lucide-react";
+import { Calendar, ClipboardList, Eye, Search } from "lucide-react";
 import { AsyncState, PageHeader, PaginationNav } from "@/components/shared/admin-ui";
 import { PermissionGate } from "@/components/shared/permission-gate";
 import { Badge } from "@/components/ui/badge";
@@ -61,6 +61,8 @@ export default function AuditLogsPage() {
   const [action, setAction] = useState("");
   const [targetType, setTargetType] = useState("");
   const [actorId, setActorId] = useState("");
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
   const debouncedAction = useDebounce(action, 300);
   const debouncedTargetType = useDebounce(targetType, 300);
   const debouncedActorId = useDebounce(actorId, 300);
@@ -68,12 +70,14 @@ export default function AuditLogsPage() {
   const [selected, setSelected] = useState<AuditLog | null>(null);
 
   const logs = useQuery({
-    queryKey: ["audit-logs", debouncedAction, debouncedTargetType, debouncedActorId, page],
+    queryKey: ["audit-logs", debouncedAction, debouncedTargetType, debouncedActorId, startDate, endDate, page],
     queryFn: () =>
       systemService.getAuditLogs({
         action: debouncedAction || undefined,
         targetType: debouncedTargetType || undefined,
         actorId: debouncedActorId || undefined,
+        startDate: startDate || undefined,
+        endDate: endDate || undefined,
         page,
         limit: 20,
       }),
@@ -92,7 +96,7 @@ export default function AuditLogsPage() {
           description={isMounted ? t.adminAuditLogs.description : "Theo dõi các thay đổi quan trọng và dữ liệu liên quan đến từng hành động."}
         />
         <Card>
-          <CardContent className="grid gap-3 pt-6 md:grid-cols-3 md:pt-8">
+          <CardContent className="grid gap-3 pt-6 sm:grid-cols-2 lg:grid-cols-5 md:pt-8">
             <label className="relative">
               <Search className="absolute left-4 top-3.5 h-4 w-4 text-kawaii-mocha/45" />
               <Input
@@ -121,6 +125,34 @@ export default function AuditLogsPage() {
               }}
               placeholder={isMounted ? t.adminAuditLogs.actorPlaceholder : "Email hoặc ID người thực hiện..."}
             />
+            <label className="relative">
+              <Calendar className="absolute left-4 top-3.5 h-4 w-4 text-kawaii-mocha/45" />
+              <Input
+                type="date"
+                className="pl-10 text-xs"
+                value={startDate}
+                onChange={(event) => {
+                  setStartDate(event.target.value);
+                  setPage(1);
+                }}
+                aria-label="Từ ngày (UTC+7)"
+                title="Từ ngày (UTC+7)"
+              />
+            </label>
+            <label className="relative">
+              <Calendar className="absolute left-4 top-3.5 h-4 w-4 text-kawaii-mocha/45" />
+              <Input
+                type="date"
+                className="pl-10 text-xs"
+                value={endDate}
+                onChange={(event) => {
+                  setEndDate(event.target.value);
+                  setPage(1);
+                }}
+                aria-label="Đến ngày (UTC+7)"
+                title="Đến ngày (UTC+7)"
+              />
+            </label>
           </CardContent>
         </Card>
         <AsyncState

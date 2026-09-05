@@ -169,18 +169,20 @@ export default function ImportsPage() {
           description={isMounted ? t.adminImports.description : "Xét duyệt và phát hành giao diện bàn phím nhập từ Discord Threads"}
           actions={
             <div className="flex items-center gap-2">
-              <PermissionGate permission={PERMISSIONS.IMPORT_MANAGE}>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="h-10 rounded-2xl border-rose-200 text-xs font-bold text-rose-600 hover:bg-rose-50 bouncy-hover"
-                  onClick={handleResetDb}
-                  disabled={resetMutation.isPending}
-                >
-                  <Trash2 className="h-4 w-4 mr-1.5" />
-                  {isMounted ? t.adminImports.resetDbBtn : "Dọn sạch DB"}
-                </Button>
-              </PermissionGate>
+              {process.env.NODE_ENV !== "production" && (
+                <PermissionGate permission={PERMISSIONS.IMPORT_MANAGE}>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="h-10 rounded-2xl border-rose-200 text-xs font-bold text-rose-600 hover:bg-rose-50 bouncy-hover"
+                    onClick={handleResetDb}
+                    disabled={resetMutation.isPending}
+                  >
+                    <Trash2 className="h-4 w-4 mr-1.5" />
+                    {isMounted ? t.adminImports.resetDbBtn : "Dọn sạch DB"}
+                  </Button>
+                </PermissionGate>
+              )}
 
               <Button
                 variant="outline"
