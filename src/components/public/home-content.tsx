@@ -1,15 +1,13 @@
 "use client";
 
 import { FormEvent, useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
   ArrowRight,
-  Cloud,
-  Download,
   MessageCircle,
   Search,
-  Sparkles,
   WandSparkles,
 } from "lucide-react";
 import { Header } from "@/components/shared/header";
@@ -67,9 +65,14 @@ export function HomeContent() {
       <Header />
       <main>
         <section className="relative overflow-hidden px-4 py-20 md:py-28">
-          <div className="pointer-events-none absolute left-[7%] top-20 animate-float text-kawaii-babyblue/55"><Cloud className="h-20 w-20" /></div>
-          <div className="pointer-events-none absolute right-[8%] top-16 animate-float-slow text-kawaii-pink/70"><Sparkles className="h-14 w-14" /></div>
-          <div className="pointer-events-none absolute bottom-10 right-[22%] h-40 w-40 rounded-full bg-kawaii-sky/45 blur-3xl" />
+          <Image
+            src="/images/logos/hinh-nen-cinnamoroll-1.jpg"
+            alt="Cinnamoroll background"
+            fill
+            priority
+            className="pointer-events-none object-cover object-[center_30%] opacity-45"
+          />
+          <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-kawaii-cream/50 via-kawaii-cream/20 to-kawaii-cream/75 backdrop-blur-[1px]" />
           <div className="relative mx-auto max-w-6xl text-center">
             <div className="inline-flex items-center gap-2 rounded-full border-2 border-kawaii-sky/70 bg-card/85 px-5 py-2 text-sm font-extrabold text-kawaii-mocha shadow-cloud">
               <WandSparkles className="h-4 w-4 text-kawaii-warmbrown" />
@@ -125,7 +128,6 @@ export function HomeContent() {
 
         <section className="px-4 py-16 md:py-24">
           <div className="relative mx-auto max-w-6xl overflow-hidden rounded-[3rem] border-2 border-kawaii-babyblue bg-gradient-to-r from-kawaii-sky/65 via-kawaii-cloud to-kawaii-blush/55 px-6 py-12 text-center shadow-cloud md:px-12 md:py-16">
-            <Download className="absolute -bottom-4 left-10 h-28 w-28 rotate-[-12deg] text-kawaii-babyblue/25" />
             <MessageCircle className="mx-auto h-11 w-11 text-kawaii-warmbrown" />
             <h2 className="mt-4 text-3xl font-black text-kawaii-mocha md:text-4xl">{text.home.discordTitle}</h2>
             <p className="mx-auto mt-4 max-w-2xl text-sm font-medium leading-relaxed text-kawaii-mocha/70 md:text-base">{text.home.discordDesc}</p>

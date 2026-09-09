@@ -465,12 +465,12 @@ export function GuideContent() {
                   {isMounted ? t.guide.wechatDesc : "Dùng chức năng tìm kiếm với từ khóa '面肥' hoặc tên bàn phím. Nếu không hiểu tiếng Trung có thể bật dịch ở phía trên màn hình..."}
                 </p>
 
-                <div className="p-3.5 rounded-2xl bg-blue-50 border border-blue-200 text-blue-900 text-xs font-semibold flex items-center gap-2">
+                {/* <div className="p-3.5 rounded-2xl bg-blue-50 border border-blue-200 text-blue-900 text-xs font-semibold flex items-center gap-2">
                   <MessageCircle className="h-4 w-4 text-[#5865F2] shrink-0" />
                   <span>
                     {isMounted ? t.guide.wechatQrSupport : "Bạn nào cần quét mã QR WeChat thì tag Roi trong kênh #tiếng-việt trên Discord nha!"}
                   </span>
-                </div>
+                </div> */}
               </div>
             </div>
           )}
