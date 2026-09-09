@@ -4,7 +4,6 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
   Bell,
-  Boxes,
   CalendarClock,
   ClipboardList,
   CloudUpload,
@@ -44,12 +43,12 @@ interface NavItemConfig {
 
 const navItems: NavItemConfig[] = [
   { href: "/dashboard", icon: Home, permissions: DASHBOARD_ACCESS_PERMISSIONS, key: "dashboard", fallbackVi: "Tổng quan", fallbackEn: "Dashboard" },
+  { href: "/keyboards/liked", icon: Heart, permission: PERMISSIONS.KEYBOARD_LIKE_READ, key: "likedKeyboards", fallbackVi: "Theme đã thích", fallbackEn: "Liked Themes" },
   { href: "/keyboards/manage", icon: Keyboard, permission: PERMISSIONS.KEYBOARD_READ, key: "keyboardsManage", fallbackVi: "Quản trị theme", fallbackEn: "Theme Management" },
   { href: "/imports", icon: CloudUpload, permission: PERMISSIONS.IMPORT_READ, key: "imports", fallbackVi: "Discord Imports", fallbackEn: "Discord Imports" },
   { href: "/categories/manage", icon: FolderTree, permission: PERMISSIONS.CATEGORY_READ, key: "categoriesManage", fallbackVi: "Quản trị danh mục", fallbackEn: "Category Management" },
   { href: "/colors/manage", icon: Palette, permission: PERMISSIONS.COLOR_READ, key: "colorsManage", fallbackVi: "Quản trị màu sắc", fallbackEn: "Color Management" },
   { href: "/styles/manage", icon: Sparkles, permission: PERMISSIONS.STYLE_READ, key: "stylesManage", fallbackVi: "Quản trị phong cách", fallbackEn: "Style Management" },
-  { href: "/collections", icon: Boxes, permission: PERMISSIONS.COLLECTION_READ, key: "collections", fallbackVi: "Bộ sưu tập", fallbackEn: "Collections" },
   { href: "/users", icon: Users, permission: PERMISSIONS.USER_READ, key: "users", fallbackVi: "Người dùng", fallbackEn: "Users" },
   { href: "/roles", icon: ShieldCheck, permission: PERMISSIONS.ROLE_READ, key: "roles", fallbackVi: "Vai trò và quyền", fallbackEn: "Roles & Permissions" },
   { href: "/audit-logs", icon: ClipboardList, permission: PERMISSIONS.AUDIT_LOG_READ, key: "auditLogs", fallbackVi: "Nhật ký kiểm toán", fallbackEn: "Audit Logs" },

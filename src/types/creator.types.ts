@@ -3,7 +3,6 @@ export interface CreatorStats {
   downloadsCount: number;
   followersCount: number;
   likesCount: number;
-  collectionsCount: number;
 }
 
 export interface CreatorPublic {

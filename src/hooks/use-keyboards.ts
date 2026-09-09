@@ -12,6 +12,7 @@ import type {
 export const keyboardKeys = {
   all: ["public-keyboards"] as const,
   list: (params: KeyboardListParams) => [...keyboardKeys.all, "list", params] as const,
+  liked: (params?: { page?: number; limit?: number }) => [...keyboardKeys.all, "liked", params] as const,
   detail: (slug: string) => [...keyboardKeys.all, "detail", slug] as const,
   categories: ["public-keyboard-categories"] as const,
   colors: ["public-keyboard-colors"] as const,
@@ -22,6 +23,13 @@ export function useKeyboards(params: KeyboardListParams) {
   return useQuery({
     queryKey: keyboardKeys.list(params),
     queryFn: () => keyboardService.getList(params),
+  });
+}
+
+export function useLikedKeyboards(params?: { page?: number; limit?: number }) {
+  return useQuery({
+    queryKey: keyboardKeys.liked(params),
+    queryFn: () => keyboardService.getLikedKeyboards(params),
   });
 }
 
@@ -49,6 +57,7 @@ export function useToggleKeyboardLike(slug: string) {
         likeCount: result.likeCount,
       } : current);
       client.invalidateQueries({ queryKey: [...keyboardKeys.all, "list"] });
+      client.invalidateQueries({ queryKey: [...keyboardKeys.all, "liked"] });
     },
   });
 }

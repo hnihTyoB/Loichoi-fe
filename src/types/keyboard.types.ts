@@ -58,6 +58,8 @@ export interface KeyboardCardData {
   isFeatured?: boolean;
   author?: KeyboardAuthor | null;
   publishedAt?: string | null;
+  isLiked?: boolean;
+  likedAt?: string | null;
 }
 
 export interface KeyboardPreviewImage {

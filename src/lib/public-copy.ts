@@ -135,7 +135,7 @@ const copy = {
       search: "Search by theme name, description...",
       searchAction: "Find themes",
       trending: "Trending now",
-      trendingDesc: "The most downloaded themes in the collection.",
+      trendingDesc: "The most downloaded themes in the library.",
       discordTitle: "Let's make keyboards beautiful together",
       discordDesc: "Join Discord for community themes, keyboard screenshots, and creator conversations.",
       discordAction: "Join Discord",

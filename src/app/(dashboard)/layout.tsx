@@ -19,7 +19,9 @@ export default function DashboardLayout({
   const router = useRouter();
   const pathname = usePathname();
   const isPublicRoute = pathname === "/keyboards" ||
-    (pathname.startsWith("/keyboards/") && !pathname.startsWith("/keyboards/manage")) ||
+    (pathname.startsWith("/keyboards/") &&
+      !pathname.startsWith("/keyboards/manage") &&
+      !pathname.startsWith("/keyboards/liked")) ||
     pathname === "/trending" ||
     pathname === "/guide";
 

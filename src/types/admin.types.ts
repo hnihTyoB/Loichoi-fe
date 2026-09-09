@@ -79,38 +79,6 @@ export interface AdminStyle {
   updatedAt: string;
 }
 
-export interface CollectionItem {
-  id: string;
-  position: number;
-  theme: { id: string; name: string; slug: string; coverUrl: string };
-}
-
-export interface AdminCollection {
-  id: string;
-  name: string;
-  slug: string;
-  description: string | null;
-  coverUrl: string | null;
-  isPublic: boolean;
-  isFeatured: boolean;
-  itemsCount: number;
-  previewThemes: Array<{ id: string; name: string; slug: string; coverUrl: string }>;
-  items?: CollectionItem[];
-  creator: { id: string; fullName: string | null; username: string | null };
-  createdAt: string;
-  updatedAt: string;
-}
-
-export interface CollectionPayload {
-  name: string;
-  slug?: string;
-  description?: string;
-  coverUrl?: string;
-  isPublic: boolean;
-  isFeatured?: boolean;
-  themeIds?: string[];
-}
-
 export interface SystemConfigItem {
   id: string;
   key: string;

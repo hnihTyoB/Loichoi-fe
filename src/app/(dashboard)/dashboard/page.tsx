@@ -9,7 +9,6 @@ import {
   Clock,
   Cloud,
   Database,
-  FolderHeart,
   Heart,
   Keyboard,
   Layers,
@@ -21,11 +20,12 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { PermissionGate } from "@/components/shared/permission-gate";
 import { useAuth } from "@/hooks/use-auth";
 import { useTranslation } from "@/hooks/use-translation";
 import { formatDate } from "@/lib/utils";
+import { DASHBOARD_ACCESS_PERMISSIONS, canAccessDashboard } from "@/lib/dashboard-access";
 import { categoryService } from "@/services/category.service";
-import { collectionService } from "@/services/collection.service";
 import { keyboardService } from "@/services/keyboard.service";
 import { rbacService } from "@/services/rbac.service";
 import { systemService } from "@/services/system.service";
@@ -45,11 +45,14 @@ export default function DashboardPage() {
   const { user } = useAuth();
   const { t, isMounted } = useTranslation();
 
+  const hasAccess = canAccessDashboard(user?.permissions);
+
   // 1. Keyboards stats query
   const keyboardsQuery = useQuery({
     queryKey: ["dashboard", "keyboards"],
     queryFn: () => keyboardService.getManagementList({ limit: 100 }),
     staleTime: 30000,
+    enabled: hasAccess,
   });
 
   // 2. Users stats query
@@ -57,6 +60,7 @@ export default function DashboardPage() {
     queryKey: ["dashboard", "users"],
     queryFn: () => userService.getUsers({ limit: 100 }),
     staleTime: 30000,
+    enabled: hasAccess,
   });
 
   // 3. Roles query
@@ -64,6 +68,7 @@ export default function DashboardPage() {
     queryKey: ["dashboard", "roles"],
     queryFn: () => rbacService.getRoles(),
     staleTime: 60000,
+    enabled: hasAccess,
   });
 
   // 4. System health & readiness query
@@ -72,6 +77,7 @@ export default function DashboardPage() {
     queryFn: () => systemService.getHealthReadiness(),
     refetchInterval: 30000,
     retry: 1,
+    enabled: hasAccess,
   });
 
   // 5. Maintenance status query
@@ -80,6 +86,7 @@ export default function DashboardPage() {
     queryFn: () => systemService.getMaintenance(),
     staleTime: 30000,
     retry: 1,
+    enabled: hasAccess,
   });
 
   // 6. Recent audit logs query
@@ -87,19 +94,15 @@ export default function DashboardPage() {
     queryKey: ["dashboard", "audit-logs"],
     queryFn: () => systemService.getAuditLogs({ limit: 5 }),
     staleTime: 15000,
+    enabled: hasAccess,
   });
 
-  // 7. Categories & Collections summary query
+  // 7. Categories summary query
   const categoriesQuery = useQuery({
     queryKey: ["dashboard", "categories"],
     queryFn: () => categoryService.getPublicList(),
     staleTime: 60000,
-  });
-
-  const collectionsQuery = useQuery({
-    queryKey: ["dashboard", "collections"],
-    queryFn: () => collectionService.getList({ limit: 10 }),
-    staleTime: 60000,
+    enabled: hasAccess,
   });
 
   // Calculated Real Values
@@ -125,7 +128,25 @@ export default function DashboardPage() {
   const recentKeyboards = keyboardsList.slice(0, 4);
 
   return (
-    <div className="space-y-8">
+    <PermissionGate
+      permissions={DASHBOARD_ACCESS_PERMISSIONS}
+      fallback={
+        <div className="flex min-h-[400px] flex-col items-center justify-center rounded-[2.5rem] border-2 border-kawaii-sky/50 bg-card/80 p-8 text-center shadow-cloud">
+          <div className="flex h-16 w-16 items-center justify-center rounded-3xl bg-destructive/10 text-destructive shadow-inner">
+            <ShieldCheck className="h-8 w-8" />
+          </div>
+          <h2 className="mt-4 text-xl font-black text-kawaii-mocha">
+            {isMounted ? t.common.errorOccurred : "Không có quyền truy cập"}
+          </h2>
+          <p className="mt-2 max-w-md text-sm text-kawaii-mocha/70">
+            {isMounted
+              ? t.common.errorDescription
+              : "Bạn không có quyền truy cập trang tổng quan quản trị."}
+          </p>
+        </div>
+      }
+    >
+      <div className="space-y-8">
       {/* Welcome Banner */}
       <div className="rounded-[2.5rem] border-2 border-kawaii-sky/80 bg-gradient-to-r from-kawaii-cloud via-card to-kawaii-blush/40 p-6 md:p-8 shadow-cloud flex flex-col md:flex-row items-center justify-between gap-6">
         <div className="space-y-2 text-center md:text-left">
@@ -417,17 +438,6 @@ export default function DashboardPage() {
               </div>
             </Link>
 
-            <Link href="/collections">
-              <div className="rounded-2xl border border-kawaii-blush/40 bg-kawaii-cloud/40 p-3 text-center transition-all hover:scale-105 hover:bg-kawaii-cloud">
-                <FolderHeart className="mx-auto h-5 w-5 text-kawaii-warmbrown" />
-                <div className="mt-1 text-lg font-black text-kawaii-mocha">
-                  {collectionsQuery.data?.meta?.total ?? collectionsQuery.data?.data?.length ?? "—"}
-                </div>
-                <p className="text-[11px] font-bold text-kawaii-mocha/60">
-                  {isMounted ? t.dashboard.collectionsCount : "Bộ sưu tập"}
-                </p>
-              </div>
-            </Link>
 
             <Link href="/audit-logs">
               <div className="rounded-2xl border border-kawaii-sky/40 bg-kawaii-cloud/40 p-3 text-center transition-all hover:scale-105 hover:bg-kawaii-cloud">
@@ -496,6 +506,7 @@ export default function DashboardPage() {
         </Card>
       </div>
     </div>
+    </PermissionGate>
   );
 }
 

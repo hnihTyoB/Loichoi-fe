@@ -80,7 +80,10 @@ apiClient.interceptors.response.use(
             currentPath.startsWith("/reset-password") ||
             currentPath.startsWith("/callback") ||
             currentPath === "/trending" ||
-            (currentPath === "/keyboards" || (currentPath.startsWith("/keyboards/") && !currentPath.startsWith("/keyboards/manage")));
+            (currentPath === "/keyboards" ||
+              (currentPath.startsWith("/keyboards/") &&
+                !currentPath.startsWith("/keyboards/manage") &&
+                !currentPath.startsWith("/keyboards/liked")));
 
           if (!isPublicPath) {
             window.location.href = `/login?redirect=${encodeURIComponent(currentPath)}`;

@@ -1,6 +1,7 @@
 import { apiClient } from "@/lib/api-client";
 import type { ApiResponse } from "@/types/api.types";
 import type {
+  KeyboardCardData,
   KeyboardDetail,
   KeyboardLikeResult,
   KeyboardListParams,
@@ -100,6 +101,22 @@ export const keyboardService = {
       `/keyboards/${encodeURIComponent(slug)}/like`,
     );
     return response.data;
+  },
+
+  async getLikedKeyboards(params?: { page?: number; limit?: number }): Promise<KeyboardListResult> {
+    const response = await apiClient.get<{ success: boolean; data: KeyboardCardData[]; meta: KeyboardListResult["meta"] }>(
+      "/keyboards/me/liked",
+      {
+        params: {
+          page: params?.page ?? 1,
+          limit: params?.limit ?? 12,
+        },
+      },
+    );
+    return {
+      data: response.data.data,
+      meta: response.data.meta,
+    };
   },
 
   async download(slug: string): Promise<{ downloadUrl: string }> {

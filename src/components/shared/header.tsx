@@ -23,7 +23,9 @@ export function Header() {
   const publicText = getPublicCopy(language);
   const isPublicRoute = pathname === "/" ||
     pathname === "/keyboards" ||
-    (pathname.startsWith("/keyboards/") && !pathname.startsWith("/keyboards/manage")) ||
+    (pathname.startsWith("/keyboards/") &&
+      !pathname.startsWith("/keyboards/manage") &&
+      !pathname.startsWith("/keyboards/liked")) ||
     pathname === "/trending" ||
     pathname === "/guide";
   const showSidebarToggle = isAuthenticated && !isPublicRoute;
@@ -76,7 +78,11 @@ export function Header() {
         aria-label={isMounted ? t.nav.menuTitle : "Public navigation"}
       >
         {publicLinks.map(({ href, label, icon: Icon }) => {
-          const active = pathname === href || (pathname.startsWith(`${href}/`) && !pathname.startsWith(`${href}/manage`));
+          const active =
+            pathname === href ||
+            (pathname.startsWith(`${href}/`) &&
+              !pathname.startsWith(`${href}/manage`) &&
+              !pathname.startsWith(`${href}/liked`));
           return (
             <Link
               key={href}

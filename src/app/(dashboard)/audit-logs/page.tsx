@@ -41,7 +41,6 @@ function getTargetDisplay(log: AuditLog) {
     (typeof details?.categoryName === "string" ? details.categoryName : null) ||
     (typeof details?.key === "string" ? details.key : null) ||
     (typeof details?.templateCode === "string" ? details.templateCode : null) ||
-    (typeof details?.collectionName === "string" ? details.collectionName : null) ||
     log.targetId
   );
 }
