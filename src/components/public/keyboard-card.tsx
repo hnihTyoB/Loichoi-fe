@@ -40,6 +40,7 @@ export function KeyboardCard({ keyboard, priority, className, locale = "vi" }: K
             src={keyboard.coverUrl}
             alt={keyboard.name}
             fill
+            unoptimized
             priority={priority}
             sizes="(max-width: 640px) 50vw, (max-width: 1200px) 50vw, 33vw"
             className="object-cover transition-transform duration-500 group-hover:scale-105"

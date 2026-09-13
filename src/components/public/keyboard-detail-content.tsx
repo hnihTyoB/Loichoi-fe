@@ -42,17 +42,27 @@ function KeyboardGallery({ keyboard, previewLabel, previewDescription, imageUnit
   const images = [
     { id: "cover", url: keyboard.coverUrl, altText: keyboard.name, position: -1 },
     ...keyboard.previewImages,
-  ].filter((image, index, all) => all.findIndex((candidate) => candidate.url === image.url) === index);
-  const [selectedId, setSelectedId] = useState(images[0].id);
+  ].filter((image, index, all) => Boolean(image.url) && all.findIndex((candidate) => candidate.url === image.url) === index);
+  const [selectedId, setSelectedId] = useState(images[0]?.id ?? "cover");
   const selected = images.find((image) => image.id === selectedId) || images[0];
 
   return (
     <div className="space-y-4">
       <div className="relative aspect-[4/3] overflow-hidden rounded-[2.75rem] border-2 border-kawaii-sky/65 bg-gradient-to-br from-kawaii-cloud to-kawaii-blush/30 shadow-cloud">
-        <Image src={selected.url} alt={selected.altText || keyboard.name} fill priority sizes="(max-width: 1024px) 100vw, 58vw" className="object-contain p-2 md:p-4" />
+        {selected?.url ? (
+          <Image
+            src={selected.url}
+            alt={selected.altText || keyboard.name}
+            fill
+            priority
+            unoptimized
+            sizes="(max-width: 1024px) 100vw, 58vw"
+            className="object-contain p-2 md:p-4"
+          />
+        ) : null}
         <div className="absolute bottom-4 right-4 inline-flex items-center gap-2 rounded-full border border-white/70 bg-white/90 px-3 py-1.5 text-xs font-extrabold text-kawaii-mocha shadow-sm backdrop-blur dark:border-kawaii-sky/40 dark:bg-kawaii-cloud/90">
           <Images className="h-3.5 w-3.5" />
-          {images.findIndex((image) => image.id === selected.id) + 1} / {images.length}
+          {images.findIndex((image) => image.id === selected?.id) + 1} / {images.length}
         </div>
       </div>
 
@@ -66,7 +76,7 @@ function KeyboardGallery({ keyboard, previewLabel, previewDescription, imageUnit
 
       <div className="flex snap-x gap-3 overflow-x-auto pb-2" aria-label={previewLabel}>
         {images.map((image) => {
-          const selectedImage = image.id === selected.id;
+          const selectedImage = image.id === selected?.id;
           return (
             <button
               key={image.id}
@@ -77,7 +87,7 @@ function KeyboardGallery({ keyboard, previewLabel, previewDescription, imageUnit
                 ? "relative aspect-[4/3] w-28 shrink-0 snap-start overflow-hidden rounded-2xl border-2 border-kawaii-warmbrown bg-kawaii-cloud shadow-cloud"
                 : "relative aspect-[4/3] w-28 shrink-0 snap-start overflow-hidden rounded-2xl border-2 border-kawaii-sky/50 bg-kawaii-cloud opacity-75 transition hover:opacity-100"}
             >
-              <Image src={image.url} alt={image.altText || keyboard.name} fill sizes="112px" className="object-cover" />
+              <Image src={image.url} alt={image.altText || keyboard.name} fill unoptimized sizes="112px" className="object-cover" />
             </button>
           );
         })}
@@ -151,7 +161,7 @@ export function KeyboardDetailContent({ slug, initialData, downloadState }: { sl
       </Button>
 
       <section className="grid items-start gap-8 lg:grid-cols-[minmax(0,1.15fr)_minmax(340px,0.85fr)]">
-        <KeyboardGallery keyboard={item} previewLabel={text.detail.preview} previewDescription={text.detail.previewDescription} imageUnit={text.detail.imageUnit} />
+        <KeyboardGallery key={item.id} keyboard={item} previewLabel={text.detail.preview} previewDescription={text.detail.previewDescription} imageUnit={text.detail.imageUnit} />
 
         <div className="rounded-[2.5rem] border-2 border-kawaii-sky/60 bg-card p-6 shadow-cloud md:p-8">
           <div className="flex flex-wrap gap-2">
